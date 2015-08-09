@@ -23,7 +23,7 @@ import Config from 'ember-bootstrap/config';
 export default Ember.Component.extend({
 
     classNames: ['form-group'],
-    classNameBindings: ['validationClass','hasFeedback'],
+    classNameBindings: ['validationClass','hasFeedback', 'hasError'],
 
     /**
      * Whether to show validation state icons.
@@ -55,6 +55,14 @@ export default Ember.Component.extend({
      * @readonly
      */
     hasFeedback: Ember.computed.and('hasValidation','useIcons','hasIconForValidationState'),
+
+    /**
+     * @property hasErrors
+     * @type boolean
+     * @readonly
+     * @protected
+     */
+    hasError: Ember.computed.gt('form_group_errors.length',0),
 
     /**
      * The icon classes to be used for a feedback icon in a "success" validation state.
@@ -175,5 +183,11 @@ export default Ember.Component.extend({
         if (!Ember.isBlank(validation)) {
             return 'has-' + this.get('validation');
         }
-    })
+    }),
+    init: function() {
+        this._super();
+        if (!Ember.isBlank(this.get('property'))) {
+            Ember.Binding.from("model.errors." + this.get('property')).to('form_group_errors').connect(this);
+        }
+    }
 });

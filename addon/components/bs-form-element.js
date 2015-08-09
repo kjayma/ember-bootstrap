@@ -308,7 +308,8 @@ export default FormGroup.extend(I18nSupport, {
      * @readonly
      * @protected
      */
-    showErrors: Ember.computed.and('showValidation','hasErrors'),
+    //showErrors: Ember.computed.and('showValidation','hasErrors'),
+    showErrors: Ember.computed.alias('hasErrors'),
 
     /**
      * The validation ("error" or "success") or null if no validation is to be shown. Automatically computed from the
@@ -320,10 +321,16 @@ export default FormGroup.extend(I18nSupport, {
      * @protected
      */
     validation: Ember.computed('hasErrors','hasValidator','showValidation',function(){
-        if (!this.get('showValidation') || !this.get('hasValidator')) {
+        if (!this.get('showValidation') || !this.get('hasValidator') && false) {
             return null;
         }
         return this.get('hasErrors') ? 'error' : 'success';
+    }),
+
+    formattedErrors: Ember.computed('errors', function() {
+        var formatted =  this.get('errors').map(function(item) { return item.message }).join("<br />").htmlSafe();
+        console.log(formatted);
+        return formatted;
     }),
 
     /**
