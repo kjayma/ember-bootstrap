@@ -329,7 +329,6 @@ export default FormGroup.extend(I18nSupport, {
 
     formattedErrors: Ember.computed('errors', function() {
         var formatted =  this.get('errors').map(function(item) { return item.message }).join("<br />").htmlSafe();
-        console.log(formatted);
         return formatted;
     }),
 
